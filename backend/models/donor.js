@@ -23,10 +23,6 @@ const donorSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    address:{
-        type:String,
-        required:true
-    },
     rating:{
         type:Array,
         default:[]
