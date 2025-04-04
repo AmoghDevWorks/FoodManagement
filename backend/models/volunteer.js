@@ -10,6 +10,10 @@ const volunteerSchema = new mongoose.Schema({
         required:true,
         unique:true
     },
+    password:{
+        type:String,
+        required:true
+    },
     contact:{
         type:String,
         required:true
