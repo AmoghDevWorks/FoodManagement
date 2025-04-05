@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { clearUser } from "../utils/userSlice";
 import { Heart } from "lucide-react";
 import logo from "../assets/images/logo.png";
+import { clearType } from "../utils/typeSlice";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -12,6 +13,7 @@ const Header = () => {
 
   const handleLogout = () => {
     dispatch(clearUser());
+    dispatch(clearType())
     navigate("/login"); // Redirect to login page after logout
   };
 

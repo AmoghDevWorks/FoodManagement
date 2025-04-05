@@ -1,5 +1,3 @@
-const express = require('express')
-const mongoose = require('mongoose')
 const donorModel = require('../models/donor')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -8,7 +6,41 @@ const dotenv = require('dotenv')
 dotenv.config()
 
 const signin = async(req,res,next)=>{
-    console.log(req.body)
+    const { email,password } = req.body
+    let userData;
+
+    donorModel.findOne({email:email})
+    .then(user=>{
+        if(!user){
+            return res.status(400).json({data:'User not found'})
+        }
+        userData = user
+        return bcrypt.compare(password,user.password)
+    })
+    .then(passwordMatch=>{
+        if(!passwordMatch){
+            return res.status(400).json({data:'Incorrect Password'})
+        }
+
+        const token = jwt.sign(
+            { id: userData._id, email: userData.email },
+            process.env.JWT_KEY,
+            { expiresIn: "1h" }
+        )
+
+        res.status(200).json({
+            message:'Successfully loggedIn',
+            token,
+            user:{
+                id:userData._id,
+                email:userData.email,
+                name:userData.name,
+            }
+        })
+    })
+    .catch((e)=>{
+        return res.status(500).json({data:"Internal server error"})
+    })
 }
 
 const signUp = async(req,res,next)=>{
@@ -46,7 +78,7 @@ const signUp = async(req,res,next)=>{
                 { expiresIn: "1h" }
             );
 
-            res.status(201).json({
+            res.status(200).json({
                 message: "Donor registered successfully",
                 token,
                 user: {

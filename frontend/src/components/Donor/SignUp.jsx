@@ -33,7 +33,7 @@ const SignUp = () => {
     .then((res)=>{
       alert('signup successfull')
       console.log(res)
-      dispatch(setUser({name:res.data.user.name,email:res.data.user.email}))
+      dispatch(setUser({id:res.data.user._id,name:res.data.user.name,email:res.data.user.email}))
       dispatch(setType({type:'donor'}))
 
       navigate('/')
