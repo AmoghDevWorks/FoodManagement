@@ -1,32 +1,44 @@
-import React from 'react'
+import React from 'react';
+import { useNavigate } from 'react-router-dom'
 
 const SignIn = () => {
-  return (
-    <div className='min-h-screen w-screen bg-slate-900 flex items-center justify-center px-4'>
-        <div className='h-fit w-full md:w-1/2 lg:w-1/3 bg-slate-800 rounded-lg p-2'>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-yellow-400 mb-8 tracking-wide text-center my-4">
-            Log In
-            </h1>
-            <div className='flex items-left gap-2 flex-col mx-0 md:mx-5 lg:mx-16 my-5'>
-                <label htmlFor='email' className='text-2xl font-semibold text-yellow-400'>Email:</label>
-                <input className='h-10 p-2 rounded-md bg-slate-700 focus:outline-none focus:border-[1px] focus:border-yellow-400 focus:border-solid' id='email' type='email' placeholder='Email' />
-            </div>
-            <div className='flex items-left gap-2 flex-col mx-0 md:mx-5 lg:mx-16 my-5'>
-                <label htmlFor='password' className='text-2xl font-semibold text-yellow-400'>Password:</label>
-                <input className='h-10 p-2 rounded-md bg-slate-700 focus:outline-none focus:border-[1px] focus:border-yellow-400 focus:border-solid' id='password' type='text' placeholder='Password' />
-            </div>
-            <div className='flex items-center justify-center'>
-                <button
-                    className="w-1/3 my-4 bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-bold text-lg py-3 
-                        rounded-full shadow-md transition-all duration-200 ease-in-out"
-                    >
-                    Sign Up
-                </button>
-            </div>
-            
-        </div>
-    </div>
-  )
-}
 
-export default SignIn
+    const navigate = useNavigate()
+
+  return (
+    <div className="min-h-screen bg-slate-900 flex items-center justify-center overflow-x-hidden px-4">
+      <div className="bg-slate-800 w-full sm:w-3/4 md:w-1/2 lg:w-1/3 p-6 rounded-xl shadow-lg">
+        <h1 className="text-4xl font-bold text-yellow-400 text-center mb-8">Sign In as Donor</h1>
+
+        <div className="mb-4">
+          <label htmlFor="email" className="text-yellow-400 font-semibold text-lg block mb-1">Email:</label>
+          <input
+            id="email"
+            type="email"
+            placeholder="Your Email"
+            className="w-full p-3 rounded-md bg-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          />
+        </div>
+
+        <div className="mb-6">
+          <label htmlFor="password" className="text-yellow-400 font-semibold text-lg block mb-1">Password:</label>
+          <input
+            id="password"
+            type="password"
+            placeholder="Your Password"
+            className="w-full p-3 rounded-md bg-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          />
+        </div>
+
+        <button className="w-full bg-yellow-400 text-slate-900 font-bold py-2 rounded-lg hover:bg-yellow-300 transition duration-200">
+          Sign In
+        </button>
+        <div className="mt-6 text-center p-4 border border-slate-700 rounded-lg">
+            <p className="text-slate-300">Don't have an account? <span className="text-yellow-400 font-bold cursor-pointer hover:underline" onClick={()=>navigate('/donor-signup')}>Sign Up</span></p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SignIn;
