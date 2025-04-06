@@ -35,7 +35,7 @@ const SignIn = () => {
     .then(res=>{
       alert('login successfull')
 
-      dispatch(setUser({id:res.data.user._id,name:res.data.user.name,email:res.data.user.email}))
+      dispatch(setUser(res.data.user))
       dispatch(setType({type:'donor'}))
 
       navigate('/')

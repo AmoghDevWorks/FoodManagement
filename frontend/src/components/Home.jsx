@@ -15,6 +15,8 @@ const Home = () => {
         navigate('/donor-donate')
       }else if(type.type === 'seeker'){
         navigate('/get-food')
+      }else{
+        navigate('/deliver-food')
       }
     }
   }
