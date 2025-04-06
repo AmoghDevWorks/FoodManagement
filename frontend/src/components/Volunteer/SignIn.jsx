@@ -1,9 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../utils/userSlice';
+import { setType } from '../../utils/typeSlice';
+import axios from 'axios';
 
 const VolunteerSignIn = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch()
 
-  const navigate = useNavigate()
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
+
+  const handleClick = () =>{
+    axios.post('http://localhost:5000/signin-volunteer',formData)
+    .then(res=>{
+      alert('success')
+
+      dispatch(setUser(res.data.user))
+      dispatch(setType({type:"volunteer"}))
+
+      navigate('/')
+     })
+    .catch(e=>{
+      console.log(e)
+    })
+  }
 
   return (
     <div className="min-h-screen bg-slate-900 flex items-center justify-center overflow-x-hidden px-4">
@@ -21,6 +53,8 @@ const VolunteerSignIn = () => {
             <input
               id={id}
               type={type}
+              value={formData[id]}
+              onChange={handleChange}
               placeholder={placeholder}
               className="w-full p-3 rounded-md bg-slate-700 text-white placeholder-gray-400
                 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-200"
@@ -28,11 +62,23 @@ const VolunteerSignIn = () => {
           </div>
         ))}
 
-        <button className="w-full mt-6 bg-yellow-400 text-slate-900 font-bold py-2 rounded-lg hover:bg-yellow-300 transition duration-200">
+        <button
+          className="w-full mt-6 bg-yellow-400 text-slate-900 font-bold py-2 rounded-lg hover:bg-yellow-300 transition duration-200"
+          onClick={handleClick}
+        >
           Sign In
         </button>
+
         <div className="mt-6 text-center p-4 border border-slate-700 rounded-lg">
-          <p className="text-slate-300">Don't have an account? <span onClick={()=>navigate('/volunteer-signup')} className="text-yellow-400 font-bold cursor-pointer hover:underline">Sign Up</span></p>
+          <p className="text-slate-300">
+            Don't have an account?{' '}
+            <span
+              onClick={() => navigate('/volunteer-signup')}
+              className="text-yellow-400 font-bold cursor-pointer hover:underline"
+            >
+              Sign Up
+            </span>
+          </p>
         </div>
       </div>
     </div>

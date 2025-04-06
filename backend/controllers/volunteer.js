@@ -53,8 +53,44 @@ const signUp = (req,res,next) =>{
     })
 }
 
-const signIn = () =>{
+const signIn = (req,res,next) =>{
+    const { email,password } = req.body
+    let fetchedData;
 
+    volunteerModel.findOne({email:email})
+    .then(user=>{
+        if(!user){
+            return res.status(400).json({data:"User Not found, Invalid credentials"})
+        }
+
+        fetchedData = user
+        // console.log(user)
+        return bcrypt.compare(password,user.password)
+    })
+    .then(passwordMatch=>{
+        if(!passwordMatch){
+            return res.status(400).json({data:"Invalid password"})
+        }
+
+        const token = jwt.sign(
+            {id:fetchedData._id,email:fetchedData.email},
+            process.env.JWT_KEY,
+            { expiresIn:"1h" }
+        )
+
+        return res.status(200).json({
+            data:"volunteer loggedIn",
+            token,
+            user:{
+                id:fetchedData._id,
+                name:fetchedData.name,
+                email:fetchedData.email
+            }
+        })
+    })
+    .catch(e=>{
+        return res.status(500).json({data:e})
+    })
 }
 
 module.exports = { signUp,signIn }
