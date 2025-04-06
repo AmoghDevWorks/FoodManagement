@@ -30,8 +30,10 @@ const SignIn = () => {
     axios.post('http://localhost:5000/signin-seeker', formData)
       .then((res) => {
         if (res.status === 200) {
+          alert('success')
+
           dispatch(setUser(res.data.user));
-          dispatch(setType('seeker'));
+          dispatch(setType({type:"seeker"}));
           navigate('/'); 
         }
       })

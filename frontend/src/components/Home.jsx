@@ -1,35 +1,26 @@
 import React from "react";
 import { Heart, Utensils, Truck, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from 'react-redux'
 
 const Home = () => {
   const navigate = useNavigate();
+  const type = useSelector((state)=>state.type.value)
+
+  const handleGetStarted = () =>{
+    if(!type){
+      navigate("/login")
+    }else{
+      if(type.type === 'donor'){
+        navigate('/donor-donate')
+      }else if(type.type === 'seeker'){
+        navigate('/get-food')
+      }
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
-      {/* Navigation */}
-      {/* <nav className="bg-gray-800 shadow-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
-            <div className="flex items-center">
-              <Heart className="h-8 w-8 text-yellow-500" />
-              <span className="ml-2 text-xl font-bold text-white">LeftOverLove</span>
-            </div>
-            <div className="flex items-center space-x-4">
-              <button onClick={() => navigate("/login")} className="px-4 py-2 text-yellow-400 hover:text-yellow-500">
-                Login
-              </button>
-              <button
-                onClick={() => navigate("/signup")}
-                className="px-4 py-2 bg-yellow-500 text-gray-900 rounded-lg hover:bg-yellow-400 transition-colors"
-              >
-                Sign Up
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav> */}
-
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24 text-center">
         <h1 className="text-4xl tracking-tight font-extrabold text-white sm:text-5xl md:text-6xl">
@@ -42,7 +33,7 @@ const Home = () => {
         </p>
         <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
           <button
-            onClick={() => navigate("/login")}
+            onClick={handleGetStarted}
             className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-gray-900 bg-yellow-500 hover:bg-yellow-400 md:py-4 md:text-lg md:px-10"
           >
             Get Started

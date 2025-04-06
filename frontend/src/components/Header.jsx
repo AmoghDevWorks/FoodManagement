@@ -10,12 +10,28 @@ const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.value);
+  const type = useSelector((state)=>state.type.value)
 
   const handleLogout = () => {
     dispatch(clearUser());
     dispatch(clearType())
     navigate("/login"); // Redirect to login page after logout
   };
+
+  const handleClick = () =>{
+
+    if(!type){
+      navigate('/')
+    }
+
+    if(type.type === "donor"){
+      navigate('/donor-profile')
+    }else if(type.type === "seeker"){
+      navigate('/seekers-profile')
+    }else{
+      navigate('/volunteer-profile')
+    }
+  }
 
   return (
     <nav className="bg-gray-800 shadow-md sticky top-0 w-full z-50">
@@ -38,12 +54,17 @@ const Header = () => {
           {/* Authentication Buttons */}
           <div className="flex space-x-4">
             {user ? (
-              <button
-                onClick={handleLogout}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
-              >
-                Logout
-              </button>
+              <div className="flex items-center gap-5"> 
+                <div className="h-10 w-10 rounded-full bg-slate-300 cursor-pointer" onClick={handleClick}>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+                >
+                  Logout
+                </button>
+              </div>
+              
             ) : (
               <>
                 <button

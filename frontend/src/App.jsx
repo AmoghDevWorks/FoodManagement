@@ -14,6 +14,11 @@ import VolunteerSignIn from './components/Volunteer/SignIn'
 import DonorSignUp from './components/Donor/SignUp'
 import SeekersSignUp from './components/Seekers/SignUp'
 import VolunteerSignUp from './components/Volunteer/SignUp'
+import DonorProfile from './components/Donor/Dashboard'
+import SeekerProfile from './components/Seekers/Dashboard'
+import VolunteerProfile from './components/Volunteer/Dashboard'
+import DonateFood from './components/Donor/DonateFood'
+import AllFood from './components/Seekers/AllFood'
 
 const Layout = () =>{
   return(
@@ -69,6 +74,26 @@ const router = createBrowserRouter([
       {
         path:'/volunteer-signup',
         element:<VolunteerSignUp />
+      },
+      {
+        path:'/donor-profile',
+        element:<DonorProfile />
+      },
+      {
+        path:"/seekers-profile",
+        element:<SeekerProfile />
+      },
+      {
+        path:"/volunteer-profile",
+        element:<VolunteerProfile />
+      },
+      {
+        path:"/donor-donate",
+        element:<DonateFood />
+      },
+      {
+        path:"/get-food",
+        element:<AllFood />
       }
     ]
   }
