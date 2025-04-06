@@ -3,6 +3,7 @@ const express = require('express')
 const connectDB = require('./config/db.js')
 const cors = require('cors')
 const donorRoutes = require('./routes/donorRoute.js')
+const seekerRoutes = require('./routes/seekerRoute.js')
 
 const app = express()
 app.use(bodyParser.json());
@@ -12,5 +13,6 @@ app.use(cors())
 connectDB()
 
 app.use(donorRoutes)
+app.use(seekerRoutes)
 
 app.listen(5000,()=>{console.log('connected')})
