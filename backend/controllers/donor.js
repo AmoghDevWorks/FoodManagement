@@ -2,6 +2,7 @@ const donorModel = require('../models/donor')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
+const foodModel = require('../models/food')
 
 dotenv.config()
 
@@ -91,7 +92,39 @@ const signUp = async(req,res,next)=>{
         .catch((e)=>{
             console.log(e)
         })
-      
 }
 
-module.exports = { signin,signUp }
+const donateFood = (req, res, next) => {
+    console.log('reached donatefood')
+    // const { name, rate, rating, quantity, image } = req.body;
+
+    // console.log(req.body); // For debugging
+
+    // if (!image) {
+    //     return res.status(400).json({ data: "Image (base64) is required" });
+    // }
+
+    // const newFood = new foodModel({
+    //     name,
+    //     rate,
+    //     rating: rating || 2.5,
+    //     quantity,
+    //     foodImage: image, // Storing base64 string directly
+    // });
+
+    // newFood.save()
+    //     .then(savedFood => {
+    //         res.status(201).json({
+    //             message: "Food donated successfully",
+    //             food: savedFood
+    //         });
+    //     })
+    //     .catch(err => {
+    //         console.error("Error saving food:", err);
+    //         res.status(500).json({ data: "Internal Server Error" });
+    //     });
+};
+
+
+
+module.exports = { signin,signUp,donateFood }
