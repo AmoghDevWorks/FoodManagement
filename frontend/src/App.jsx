@@ -20,6 +20,7 @@ import VolunteerProfile from './components/Volunteer/Dashboard'
 import DonateFood from './components/Donor/DonateFood'
 import AllFood from './components/Seekers/AllFood'
 import PickFood from './components/Volunteer/PickFood'
+import Cart from './components/Seekers/Cart'
 
 const Layout = () =>{
   return(
@@ -99,6 +100,10 @@ const router = createBrowserRouter([
       {
         path:'/deliver-food',
         element:<PickFood />
+      },
+      {
+        path:'/cart',
+        element:<Cart />
       }
     ]
   }

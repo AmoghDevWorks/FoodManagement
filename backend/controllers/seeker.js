@@ -128,5 +128,44 @@ const addToCart = (req, res, next) => {
   });
 };
 
+const getCart = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const data = await seekerModel.findOne({ _id: userId });
 
-module.exports = { signin,signup,getFood,addToCart }
+    if (!data) {
+      return res.status(404).json({ data: "User not found" });
+    }
+
+    const cart = data.cart;
+    let cartCompleteData = [];
+
+    //extracting all the data of food from id present in cart
+    for (let i = 0; i < cart.length; i++) {
+      const foodId = cart[i]["foodId"];
+      const foodQuantity = cart[i]["quantity"];
+
+      const foodData = await foodModel.findOne({ _id: foodId });
+
+      if (!foodData) {
+        return res.status(404).json({ data: `Unable to find food with id ${foodId}` });
+      }
+
+      const cartPatternData = {
+        foodData,
+        foodQuantity,
+      };
+
+      cartCompleteData.push(cartPatternData);
+    }
+
+    return res.status(200).json({ data: cartCompleteData });
+  } catch (e) {
+    console.error("Error in getCart:", e);
+    return res.status(500).json({ data: "Internal server error" });
+  }
+};
+
+
+
+module.exports = { signin,signup,getFood,addToCart,getCart }

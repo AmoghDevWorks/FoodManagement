@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { clearUser } from "../utils/userSlice";
 import { Heart } from "lucide-react";
-import logo from "../assets/images/logo.png";
 import { clearType } from "../utils/typeSlice";
 
 const Header = () => {
@@ -49,6 +48,7 @@ const Header = () => {
             <Link to="/" className="text-yellow-400 hover:text-yellow-500 transition">Home</Link>
             <Link to="/about" className="text-yellow-400 hover:text-yellow-500 transition">About</Link>
             <Link to="/contact" className="text-yellow-400 hover:text-yellow-500 transition">Contact</Link>
+            { type &&  type.type==='seeker' && <Link to="/cart" className="text-yellow-400 hover:text-yellow-500 transition">Cart</Link>}
           </div>
 
           {/* Authentication Buttons */}

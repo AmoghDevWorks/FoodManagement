@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 const AllFood = () => {
   const [foods, setFoods] = useState([]);
   const quantityRefs = useRef({}); // Store user-selected quantities per foodId
-  const seekerId = useSelector((state)=>state.user.value._id)
+  const seekerId = useSelector((state)=>state.user.value.id)
 
   useEffect(() => {
     axios
