@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const { ObjectId } = require('mongodb');
 const seekerModel = require('../models/Seeker')
 const dotenv = require('dotenv')
 const foodModel = require('../models/food')
@@ -107,4 +108,25 @@ const getFood = async(req,res,next) =>{
   })
 }
 
-module.exports = { signin,signup,getFood }
+const addToCart = (req, res, next) => {
+  const { foodId, quantity, seekerId } = req.body;
+
+  seekerModel.updateOne(
+    { _id: new ObjectId(seekerId) },
+    { $push: { cart: { foodId, quantity } } }
+  )
+  .then(result => {
+    if (result.modifiedCount === 1) {
+      res.status(200).json({ message: 'Item added to cart successfully.' });
+    } else {
+      res.status(404).json({ message: 'Seeker not found.' });
+    }
+  })
+  .catch(error => {
+    console.error('Error adding to cart:', error);
+    res.status(500).json({ message: 'Something went wrong.', error });
+  });
+};
+
+
+module.exports = { signin,signup,getFood,addToCart }
