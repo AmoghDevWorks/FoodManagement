@@ -94,37 +94,36 @@ const signUp = async(req,res,next)=>{
         })
 }
 
-const donateFood = (req, res, next) => {
-    console.log('reached donatefood')
-    // const { name, rate, rating, quantity, image } = req.body;
+const donateFood = (req, res) => {
+  console.log('Reached donateFood');
 
-    // console.log(req.body); // For debugging
+  const { name, rate, rating = 2.5, quantity } = req.body;
 
-    // if (!image) {
-    //     return res.status(400).json({ data: "Image (base64) is required" });
-    // }
+  if (!req.file) {
+    return res.status(400).json({ message: "Image is required" });
+  }
 
-    // const newFood = new foodModel({
-    //     name,
-    //     rate,
-    //     rating: rating || 2.5,
-    //     quantity,
-    //     foodImage: image, // Storing base64 string directly
-    // });
+  const imagePath = req.file.path;
 
-    // newFood.save()
-    //     .then(savedFood => {
-    //         res.status(201).json({
-    //             message: "Food donated successfully",
-    //             food: savedFood
-    //         });
-    //     })
-    //     .catch(err => {
-    //         console.error("Error saving food:", err);
-    //         res.status(500).json({ data: "Internal Server Error" });
-    //     });
+  const newFood = new foodModel({
+    name,
+    rate,
+    rating,
+    quantity,
+    foodImage: imagePath,
+  });
+
+  newFood.save()
+    .then((savedFood) => {
+      res.status(201).json({
+        message: "Food donated successfully",
+        food: savedFood,
+      });
+    })
+    .catch((err) => {
+      console.error("Error saving food:", err);
+      res.status(500).json({ message: "Internal Server Error" });
+    });
 };
-
-
 
 module.exports = { signin,signUp,donateFood }
