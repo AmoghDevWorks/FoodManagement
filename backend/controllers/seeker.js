@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const seekerModel = require('../models/Seeker')
 const dotenv = require('dotenv')
+const foodModel = require('../models/food')
 
 dotenv.config()
 
@@ -95,4 +96,15 @@ const signup = async(req,res,next)=>{
     })
 }
 
-module.exports = { signin,signup }
+const getFood = async(req,res,next) =>{
+  foodModel.find()
+  .then(data=>{
+    res.status(200).json({data:'Getting all food',food:data})
+
+  })
+  .catch(e=>{
+    res.status(500).json({data:"internal server error"})
+  })
+}
+
+module.exports = { signin,signup,getFood }
