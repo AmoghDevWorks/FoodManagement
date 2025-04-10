@@ -181,4 +181,21 @@ const clearCart = async(req,res,next) =>{
   })
 }
 
-module.exports = { signin,signup,getFood,addToCart,getCart,clearCart }
+const getSeekerData = async(req,res,next) =>{
+  const seekerEmail = req.params.email
+
+  seekerModel.findOne({email:seekerEmail})
+  .then(user=>{
+
+    if(!user){
+      return res.status(404).json({data:"Invalid Not found"})
+    }
+
+    return res.status(200).json({data:"successfully fetched",userData:user})
+  })
+  .catch(e=>{
+    return res.status(500).json({data:"internal server error"})
+  })
+}
+
+module.exports = { signin,signup,getFood,addToCart,getCart,clearCart,getSeekerData }

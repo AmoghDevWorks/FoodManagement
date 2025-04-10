@@ -1,6 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from 'axios'
+import { useSelector } from 'react-redux'
 
 const Dashboard = () => {
+
+  // havent set dynamic content bcz i want to keep track of orders for that
+
+  const [ userData,setUserData ] = useState(null)
+  const email = useSelector((state)=>state.user.value.email)
+
+  useEffect(()=>{
+    axios.get(`http://localhost:5000/get-seeker-data/${email}`)
+    .then((res)=>{
+      console.log(res)
+    }).catch(e=>{
+      console.log(e)
+    })
+  },[])
+
   // Example Seeker Data (Replace with real data)
   const seeker = {
     name: "Amit Kumar",
