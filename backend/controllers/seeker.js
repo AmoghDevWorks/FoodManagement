@@ -198,4 +198,75 @@ const getSeekerData = async(req,res,next) =>{
   })
 }
 
-module.exports = { signin,signup,getFood,addToCart,getCart,clearCart,getSeekerData }
+const placeOrder = async (req, res, next) => {
+  const id = req.params.id;
+
+  seekerModel
+    .findById(id)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).json({ data: "User not found" });
+      }
+
+      const cartItems = user.cart;
+
+      if (cartItems.length === 0) {
+        return res.status(400).json({ data: "Cart is empty" });
+      }
+
+      const orderDetails = [];
+
+      const promises = cartItems.map((item) => {
+        return foodModel
+          .findById(item.foodId)
+          .then((foodData) => {
+            if (foodData) {
+              orderDetails.push({
+                name: foodData.name,
+                // data: foodData,
+                quantity: item.quantity,
+              });
+            }
+          })
+          .catch((err) => {
+            console.error("Error fetching food:", err);
+          });
+      });
+
+      Promise.all(promises)
+        .then(() => {
+          return seekerModel.updateOne(
+            { _id: new ObjectId(id) },
+            {
+              $push: {
+                order: {
+                  $each: [
+                    {
+                      items: orderDetails,
+                      time: new Date(),
+                    },
+                  ],
+                  $position: 0,
+                },
+              },
+              $set: {
+                cart: [],
+              },
+            }
+          );
+        })
+        .then(() => {
+          return res.status(200).json({ data: "Order placed successfully" });
+        })
+        .catch((err) => {
+          console.error("Error placing order:", err);
+          return res.status(500).json({ data: "Internal Server error" });
+        });
+    })
+    .catch((e) => {
+      return res.status(500).json({ data: "Internal Server error" });
+    });
+};
+
+
+module.exports = { signin,signup,getFood,addToCart,getCart,clearCart,getSeekerData,placeOrder }

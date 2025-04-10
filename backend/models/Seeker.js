@@ -31,6 +31,10 @@ const seekerSchema = new mongoose.Schema({
         type:Array,
         default:[]
     },
+    order:{
+        type:Array,
+        default:[]
+    },
     cart:{
         type:Array,
         default:[]

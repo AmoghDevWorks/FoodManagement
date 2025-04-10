@@ -1,5 +1,5 @@
 const express = require('express')
-const { signin,signup,getFood,addToCart,getCart,clearCart, getSeekerData } = require('../controllers/seeker')
+const { signin,signup,getFood,addToCart,getCart,clearCart,getSeekerData,placeOrder } = require('../controllers/seeker')
 const router = express.Router()
 
 router.post('/signup-seeker',signup)
@@ -9,5 +9,6 @@ router.post('/add-to-cart',addToCart)
 router.get('/get-cart/:id',getCart)
 router.patch('/clear-cart/:id',clearCart)
 router.get('/get-seeker-data/:email',getSeekerData)
+router.patch('/place-order/:id',placeOrder)
 
 module.exports = router

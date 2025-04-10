@@ -31,6 +31,17 @@ const Cart = () => {
     })
   }
 
+  const placeOrder = () =>{
+    axios.patch(`http://localhost:5000/place-order/${id}`)
+    .then(res=>{
+      alert('food ordered successfully');
+      setCartItems([])
+    })
+    .catch(e=>{
+      alert('error found')
+    })
+  }
+
   return (
     <div className="min-h-[78.5vh] bg-slate-900 text-white p-6">
       <h1 className="text-4xl font-bold mb-6 text-center text-yellow-400">My Cart</h1>
@@ -62,7 +73,7 @@ const Cart = () => {
           <button className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg" onClick={clearCart}>
             Clear Cart
           </button>
-          <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg">
+          <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg" onClick={placeOrder}>
             Confirm Order
           </button>
         </div>
