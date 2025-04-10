@@ -166,6 +166,19 @@ const getCart = async (req, res, next) => {
   }
 };
 
+const clearCart = async(req,res,next) =>{
+  const userId = req.params.id
+  
+  seekerModel.updateOne(
+    { _id:new ObjectId(userId) },
+    { $set:{ cart:[] }}
+  )
+  .then(updatedUser=>{
+    return res.status(200).json({data:"Cart cleared successfully"})
+  })
+  .catch(e=>{
+    return res.status(500).json({data:"unable to update the cart",error:e})
+  })
+}
 
-
-module.exports = { signin,signup,getFood,addToCart,getCart }
+module.exports = { signin,signup,getFood,addToCart,getCart,clearCart }

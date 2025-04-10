@@ -48,6 +48,7 @@ const Header = () => {
             <Link to="/" className="text-yellow-400 hover:text-yellow-500 transition">Home</Link>
             <Link to="/about" className="text-yellow-400 hover:text-yellow-500 transition">About</Link>
             <Link to="/contact" className="text-yellow-400 hover:text-yellow-500 transition">Contact</Link>
+            { type &&  type.type==='seeker' && <Link to="/get-food" className="text-yellow-400 hover:text-yellow-500 transition">Food</Link>}
             { type &&  type.type==='seeker' && <Link to="/cart" className="text-yellow-400 hover:text-yellow-500 transition">Cart</Link>}
           </div>
 

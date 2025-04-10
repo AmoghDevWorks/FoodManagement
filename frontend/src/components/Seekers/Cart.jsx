@@ -20,6 +20,17 @@ const Cart = () => {
       });
   }, [id]);
 
+  const clearCart = () =>{
+    axios.patch(`http://localhost:5000/clear-cart/${id}`)
+    .then(res=>{
+      alert('cleared cart')
+      setCartItems([])
+    })
+    .catch(e=>{
+      alert('error in clearing cart')
+    })
+  }
+
   return (
     <div className="min-h-[78.5vh] bg-slate-900 text-white p-6">
       <h1 className="text-4xl font-bold mb-6 text-center text-yellow-400">My Cart</h1>
@@ -45,6 +56,17 @@ const Cart = () => {
           <p className="text-lg text-slate-300 text-center">Your cart is empty.</p>
         )}
       </div>
+
+      {cartItems.length > 0 && (
+        <div className="mt-10 flex justify-center gap-6">
+          <button className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg" onClick={clearCart}>
+            Clear Cart
+          </button>
+          <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg">
+            Confirm Order
+          </button>
+        </div>
+      )}
     </div>
   );
 };
