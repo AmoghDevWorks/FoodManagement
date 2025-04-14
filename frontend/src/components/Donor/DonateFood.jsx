@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const DonateFood = () => {
   const [formData, setFormData] = useState({
@@ -9,10 +10,12 @@ const DonateFood = () => {
     rate: '',
     rating: '',
     image: null,
+    latitude: '',
+    longitude: '',
   });
 
-  const navigate = useNavigate()
-
+  const donorId = useSelector((state) => state.user.value.id);
+  const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState(null);
 
   const handleChange = (e) => {
@@ -27,56 +30,55 @@ const DonateFood = () => {
     }
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   const data = new FormData();
-  //   data.append('name', formData.name);
-  //   data.append('quantity', formData.quantity);
-  //   data.append('rate', formData.rate);
-  //   data.append('rating', formData.rating);
-  //   data.append('image', formData.image); // raw image file
-
-  //   try {
-  //     const res = await axios.post('http://localhost:5000/donate-food', data, {
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data',
-  //       },
-  //     });
-
-  //     alert('Food donated successfully!');
-      
-  //   } catch (error) {
-  //     console.error('Error uploading food:', error);
-  //     alert('Something went wrong!');
-  //   }
-  // };
+  const handleLocationFetch = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setFormData((prev) => ({
+            ...prev,
+            latitude,
+            longitude,
+          }));
+        },
+        (error) => {
+          console.error('Error fetching location:', error);
+          alert('Unable to fetch location. Please allow location access.');
+        }
+      );
+    } else {
+      alert('Geolocation is not supported by this browser.');
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     const data = new FormData();
     data.append('name', formData.name);
     data.append('quantity', formData.quantity);
     data.append('rate', formData.rate);
     data.append('rating', formData.rating);
-    data.append('image', formData.image); // raw image file
-  
-    axios.post('http://localhost:5000/donate-food', data, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    })
-    .then((res) => {
-      alert('Food donated successfully!');
-      navigate('/')
-    })
-    .catch((error) => {
-      console.error('Error uploading food:', error);
-      alert('Something went wrong!');
-    });
+    data.append('donor', donorId);
+    data.append('latitude', formData.latitude);
+    data.append('longitude', formData.longitude);
+    data.append('image', formData.image);
+
+    axios
+      .post('http://localhost:5000/donate-food', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((res) => {
+        alert('Food donated successfully!');
+        navigate('/');
+      })
+      .catch((error) => {
+        console.error('Error uploading food:', error);
+        alert('Something went wrong!');
+      });
   };
-  
 
   return (
     <div className="min-h-screen bg-slate-900 flex items-center justify-center px-4 py-8">
@@ -137,6 +139,37 @@ const DonateFood = () => {
           />
         </div>
 
+        {/* Location Section */}
+        <div className="mb-4">
+          <label className="block text-yellow-300 font-semibold mb-1">Location (optional):</label>
+          <div className="flex gap-2">
+            <input
+              type="number"
+              name="latitude"
+              value={formData.latitude}
+              onChange={handleChange}
+              placeholder="Latitude"
+              className="w-1/2 p-3 rounded bg-slate-700 text-white"
+            />
+            <input
+              type="number"
+              name="longitude"
+              value={formData.longitude}
+              onChange={handleChange}
+              placeholder="Longitude"
+              className="w-1/2 p-3 rounded bg-slate-700 text-white"
+            />
+          </div>
+          <button
+            type="button"
+            onClick={handleLocationFetch}
+            className="mt-2 text-sm text-yellow-300 underline hover:text-yellow-400"
+          >
+            📍 Fetch My Location
+          </button>
+        </div>
+
+        {/* Image Upload */}
         <div className="mb-6">
           <label className="block text-yellow-300 font-semibold mb-1">Upload Food Image:</label>
           <input

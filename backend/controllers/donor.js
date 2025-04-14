@@ -93,37 +93,44 @@ const signUp = async(req,res,next)=>{
             console.log(e)
         })
 }
-
-const donateFood = (req, res) => {
-  console.log('Reached donateFood');
-
-  const { name, rate, rating = 2.5, quantity } = req.body;
-
-  if (!req.file) {
-    return res.status(400).json({ message: "Image is required" });
-  }
-
-  const imagePath = req.file.path;
-
-  const newFood = new foodModel({
-    name,
-    rate,
-    rating,
-    quantity,
-    foodImage: imagePath,
-  });
-
-  newFood.save()
-    .then((savedFood) => {
-      res.status(201).json({
-        message: "Food donated successfully",
-        food: savedFood,
-      });
-    })
-    .catch((err) => {
-      console.error("Error saving food:", err);
-      res.status(500).json({ message: "Internal Server Error" });
+const donateFood = (req, res) => {  
+    const { name, rate, rating = 2.5, quantity, latitude, longitude, donor } = req.body;
+  
+    // Validate required fields
+    if (!req.file) {
+        return res.status(400).json({ message: "Image is required" });
+    }
+    if (!latitude || !longitude) {
+        return res.status(400).json({ message: "Location (latitude & longitude) is required" });
+    }
+  
+    const imagePath = req.file.path;
+  
+    const newFood = new foodModel({
+        name,
+        rate,
+        rating,
+        quantity,
+        donor,
+        foodImage: imagePath,
+        location: {
+            latitude: parseFloat(latitude),
+            longitude: parseFloat(longitude),
+        },
     });
+  
+    newFood.save()
+        .then((savedFood) => {
+            res.status(201).json({
+            message: "Food donated successfully",
+            food: savedFood,
+            });
+        })
+        .catch((err) => {
+            console.error("Error saving food:", err);
+            res.status(500).json({ message: "Internal Server Error" });
+        });
 };
+  
 
 module.exports = { signin,signUp,donateFood }

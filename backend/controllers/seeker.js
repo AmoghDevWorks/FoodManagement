@@ -222,8 +222,8 @@ const placeOrder = async (req, res, next) => {
           .then((foodData) => {
             if (foodData) {
               orderDetails.push({
-                name: foodData.name,
-                // data: foodData,
+                // name: foodData.name,
+                data: foodData,
                 quantity: item.quantity,
               });
             }

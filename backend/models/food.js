@@ -22,7 +22,26 @@ const foodSchema = new mongoose.Schema({
     default: 2.5,
     min: 0,
     max: 5
+  },
+  date:{
+    type:Date,
+    default:new Date()
+  },
+  donor:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'donor'
+  },
+  location: {
+    latitude: {
+      type: Number,
+      required: true
+    },
+    longitude: {
+      type: Number,
+      required: true
+    }
   }
+  
 });
 
 const Food = mongoose.model('Food', foodSchema);
