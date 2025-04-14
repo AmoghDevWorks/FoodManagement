@@ -109,11 +109,11 @@ const getFood = async(req,res,next) =>{
 }
 
 const addToCart = (req, res, next) => {
-  const { foodId, quantity, seekerId } = req.body;
+  const { foodId, quantity, seekerId,latitude,longitude } = req.body;
 
   seekerModel.updateOne(
     { _id: new ObjectId(seekerId) },
-    { $push: { cart: { foodId, quantity } } }
+    { $push: { cart: { foodId, quantity,latitude,longitude } } }
   )
   .then(result => {
     if (result.modifiedCount === 1) {
@@ -225,6 +225,8 @@ const placeOrder = async (req, res, next) => {
                 // name: foodData.name,
                 data: foodData,
                 quantity: item.quantity,
+                seekerLatitude: item.latitude,
+                seekerLongitude: item.longitude
               });
             }
           })

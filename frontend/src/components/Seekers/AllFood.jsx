@@ -47,21 +47,40 @@ const AllFood = () => {
       alert("Please select at least 1 item.");
       return;
     }
-
-    axios
-      .post("http://localhost:5000/add-to-cart", {
-        foodId,
-        quantity: qty,
-        seekerId,
-      })
-      .then((res) => {
-        alert("Food item added to cart successfully!");
-      })
-      .catch((err) => {
-        console.error("Error adding to cart:", err);
-        alert("Failed to add item to cart.");
-      });
+  
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser.");
+      return;
+    }
+  
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+  
+        axios
+          .post("http://localhost:5000/add-to-cart", {
+            foodId,
+            quantity: qty,
+            seekerId,
+            latitude,
+            longitude,
+          })
+          .then((res) => {
+            alert("Food item added to cart successfully!");
+          })
+          .catch((err) => {
+            console.error("Error adding to cart:", err);
+            alert("Failed to add item to cart.");
+          });
+      },
+      (error) => {
+        console.error("Error getting location:", error);
+        alert("Unable to get your location.");
+      }
+    );
   };
+  
 
   const [, setRerender] = useState(false);
   const forceUpdate = () => setRerender((prev) => !prev);
